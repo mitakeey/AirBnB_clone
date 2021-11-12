@@ -25,7 +25,7 @@ class console(cmd.Cmd):
         return True
 
     def do_quit(self, line):
-        '''quit'''
+        '''Quits the program'''
         return True
 
 
