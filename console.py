@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 import cmd
 
-class console(cmd.Cmd):
-    '''simple command processor'''
+
+class Console(cmd.Cmd):
+    """simple command processor"""
 
     person = input('PLEASE IDENTIFY YOURSELF!!: ')
-    intro = 'Identifying...\n ...\nWelcome to the HBNB shell {}. Type help or ? to list commands.\n' .format(person)
+    intro = 'Identifying...\n ...\nWelcome to the HBNB shell {}. Type help or ? to list commands.\n'.format(person)
     prompt = '(hbnb) '
     tab = ['EOF', 'help', 'quit']
-
 
     def complete_foo(self, text, line, begidx, endidx):
         if not text:
@@ -30,4 +30,4 @@ class console(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    console().cmdloop()
+    Console().cmdloop()
