@@ -14,5 +14,5 @@
    - HTML
    - JAVASCRIPT
 ## AUTHORS
-- ![MITAKEEY KIAGE](https://github.com/mitakeey)
-- ![SAM MWAI](https://github.com/MwySam)
+- MITAKEEY KIAGE
+- SAM MWAI
