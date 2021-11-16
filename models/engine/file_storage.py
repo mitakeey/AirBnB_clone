@@ -1,38 +1,49 @@
+#!/usr/bin/python3
+''' module for FileStorage class '''
 import json
-from pathlib import Path
+from os.path import isfile
+import models
 
-from ..base_model import BaseModel
+
+def reload(self):
+    ''' loads data from file '''
+    clss = models.models
+    if not isfile(self._FileStorage__file_path):
+        return
+    with open(self._FileStorage__file_path, 'r') as file:
+        js_objs = json.load(file)
+        self._FileStorage__objects.clear()
+        # self.__objects = {}
+        for k, v in js_objs.items():
+            cls = clss[v['__class__']]
+            self._FileStorage__objects[k] = cls(**v)
 
 
 class FileStorage:
-    __file_path = Path("file.json")
+    ''' class for persistent storage '''
+    __file_path = 'file.json'
     __objects = {}
+    reload = reload
 
-    """
-    check if at creation, __objects is empty
-    insert an object, then that the object was insert
-    """
+    def __init__(self):
+        ''' initializes a storage engine '''
+        pass
+
     def all(self):
+        ''' gets all objects '''
         return self.__objects
 
-    """
-    Does not have a implicit test case
-    """
-    def new(self, obj: BaseModel):
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.to_dict()
+    def new(self, obj):
+        ''' registers a new object '''
+        key = '{}.{}'.format(obj.__class__.__name__, obj.id)
+        self.__objects[key] = obj
 
-    """
-    Check if a new file was created after save operation
-    Check for the last edit time
-    if we know the state of the file before saving, then we can compare
-    """
     def save(self):
-        with open(self.__file_path, mode="a", newline="\n") as file:
-            json.dump(self.__objects, file)
-
-    """
-    Check that __objects has elements after reload
-    """
-    def reload(self):
-        if self.__file_path.exists():
-            pass
+        ''' saves all objects to a file '''
+        with open(self.__file_path, 'w') as file:
+            r_objs = self.__objects
+            objs = {}
+            for k in r_objs:
+                v = r_objs[k]
+                objs[k] = v.to_dict()
+            json.dump(objs, file)
