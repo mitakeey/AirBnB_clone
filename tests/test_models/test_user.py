@@ -1,22 +1,26 @@
 #!/usr/bin/python3
-''' module for user tests '''
-from unittest import TestCase
-import json
-import re
-from uuid import UUID, uuid4
-from datetime import datetime
-from time import sleep
+"""
+Test file for user class
+"""
 
-from models.base_model import BaseModel
+import unittest
 from models.user import User
+from models.base_model import BaseModel
 
 
-class TestUser(TestCase):
-    ''' tests User class '''
-    def test_8(self):
-        ''' task 8 tests '''
-        self.assertTrue(issubclass(User, BaseModel))
-        self.assertEqual(User.email, '')
-        self.assertEqual(User.password, '')
-        self.assertEqual(User.first_name, '')
-        self.assertEqual(User.last_name, '')
+class TestClass(unittest.TestCase):
+    """Test cases"""
+
+    def test_create_istance(self):
+        """create a new instance"""
+        new_user = User()
+        self.assertIsInstance(new_user, User)
+
+    def test_create_istance2(self):
+        """create a new instance"""
+        new_user = User()
+        self.assertIsInstance(new_user, BaseModel)
+
+
+if __name__ == '__main__':
+    unittest.main()

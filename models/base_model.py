@@ -1,40 +1,55 @@
 #!/usr/bin/python3
-''' module for BaseModel class '''
-from uuid import uuid4
+"""
+base class file
+"""
+
+import uuid
 from datetime import datetime
-from . import storage
+import models
+from json import JSONEncoder
 
 
 class BaseModel:
-    ''' class of the base model of higher-level data models '''
-    def __init__(self, *arg, **kwargs):
-        ''' BaseModel constructor '''
+    """
+
+    BaseModel
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        """initialize the instance of the class"""
         if kwargs:
-            for k in kwargs:
-                if k in ['created_at', 'updated_at']:
-                    setattr(self, k, datetime.fromisoformat(kwargs[k]))
-                elif k != '__class__':
-                    setattr(self, k, kwargs[k])
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    value = datetime.strptime(
+                            value,
+                            '%Y-%m-%dT%H:%M:%S.%f')
+                elif key == "__class__":
+                    continue
+
+                setattr(self, key, value)
         else:
-            self.id = str(uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = self.created_at.replace()
-            storage.new(self)
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            models.storage.new(self)
 
     def save(self):
-        ''' saves a model '''
-        self.updated_at = datetime.utcnow()
-        storage.save()
+        """save new informations to the class object"""
+        self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
-        ''' returns a dictionary representation of the model '''
-        dct = self.__dict__.copy()
-        dct['__class__'] = self.__class__.__name__
-        dct['created_at'] = self.created_at.isoformat()
-        dct['updated_at'] = self.updated_at.isoformat()
-        return dct
+        """return dictionary representaton of the instance"""
+        dict_repr = {}
+        for key, value in self.__dict__.items():
+            dict_repr[key] = value
+            if isinstance(value, datetime):
+                dict_repr[key] = value.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        dict_repr["__class__"] = type(self).__name__
+        return dict_repr
 
     def __str__(self):
-        ''' returns a string representation of the model '''
-        return '[{}] ({}) {}'.format(
-            self.__class__.__name__, self.id, self.__dict__)
+        """return the string formated message when instance is called"""
+        clName = self.__class__.__name__
+        return "[{}] ({}) {}".format(clName, self.id, self.__dict__)

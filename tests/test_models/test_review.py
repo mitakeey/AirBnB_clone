@@ -1,21 +1,26 @@
 #!/usr/bin/python3
-''' module for review tests '''
-from unittest import TestCase
-import json
-import re
-from uuid import UUID, uuid4
-from datetime import datetime
-from time import sleep
+"""
+Test file for user class
+"""
 
-from models.base_model import BaseModel
+import unittest
 from models.review import Review
+from models.base_model import BaseModel
 
 
-class TestCity(TestCase):
-    ''' tests Review class '''
-    def test_9(self):
-        ''' task 9 tests '''
-        self.assertTrue(issubclass(Review, BaseModel))
-        self.assertEqual(Review.place_id, '')
-        self.assertEqual(Review.user_id, '')
-        self.assertEqual(Review.text, '')
+class TestClass(unittest.TestCase):
+    """Test cases"""
+
+    def test_create_istance(self):
+        """create a new instance"""
+        new_state = Review()
+        self.assertIsInstance(new_state, Review)
+
+    def test_create_istance2(self):
+        """create a new instance"""
+        new_state = Review()
+        self.assertIsInstance(new_state, BaseModel)
+
+
+if __name__ == '__main__':
+    unittest.main()
